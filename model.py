@@ -167,13 +167,39 @@ def get_triangle_constraints(vertices):
         x = uniform(0,5.0)
 
     return (x,y,0)
-        
+
+def clear_screen():
+    for obj in bpy.context.scene.objects:
+        if obj.type == 'MESH' or obj.type=='FONT' or obj.type=='CAMERA' or obj.type=='LAMP':
+            obj.select = True
+        else:
+            obj.select = False
+    bpy.ops.object.delete()
+    
+def clear_heirarchy():
+    for block in bpy.data.meshes:
+        if block.users == 0:
+            bpy.data.meshes.remove(block)
+
+    for block in bpy.data.materials:
+        if block.users == 0:
+            bpy.data.materials.remove(block)
+
+    for block in bpy.data.textures:
+        if block.users == 0:
+            bpy.data.textures.remove(block)
+
+    for block in bpy.data.images:
+        if block.users == 0:
+            bpy.data.images.remove(block)
 
 if __name__=="__main__":
     
+    clear_screen()
+    clear_heirarchy()
     scene = bpy.context.scene
     # change this to see 3 or 2 tuple demo
-    tuples = 3
+    tuples = 2
     lamp, cam, kernel, culture1, culture2 = graphics_factory.create(tuples)
     
     positions = []
@@ -201,3 +227,4 @@ if __name__=="__main__":
 
         # move next 10 frames forward - Blender will figure out what to do between this time
         number_of_frame += 10
+
